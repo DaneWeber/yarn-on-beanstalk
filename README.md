@@ -13,7 +13,10 @@ This is an attempt to make a minimal set of changes to deploy a NextJS applicati
 3. Specify the Node version in the `package.json` with an `engines` entry.
 4. Set the port to 5000 in the `start` script in the `package.json`.
 5. Create a `/healthcheck` endpoint.
+6. Add an `.ebignore` file so that `node_modules` is uploaded and `npm install` is skipped.
 
 ## Deploy Steps
 
 Include the `node_modules` in the deployed package in order to [skip the npm install](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-nodemodules).
+
+1. Run `yarn` prior to uploading source so that dependencies are included.
