@@ -37,3 +37,8 @@ next-env.d.ts
 
 # EB
 /source-bundles/*.zip
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
