@@ -4,4 +4,13 @@ const nextConfig = {
   swcMinify: true,
 }
 
-module.exports = nextConfig
+module.exports = {
+  rewrites: async () => {
+    return [
+      {
+        source: '/healthcheck',
+        destination: '/api/healthcheck',
+      },
+    ];
+  },
+};
