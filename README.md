@@ -17,6 +17,16 @@ This is an attempt to make a minimal set of changes to deploy a NextJS applicati
 
 ## Deploy Steps
 
+### One-Time Setup
+
+Install the AWS EB CLI.
+
+On a Mac via Homebrew:
+
+`brew install awsebcli`
+
+### Each Deploy
+
 Include the `node_modules` in the deployed package in order to [skip the npm install](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-nodemodules).
 
 1. Run `yarn` prior to uploading source so that dependencies are included.
