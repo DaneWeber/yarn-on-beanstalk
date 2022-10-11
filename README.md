@@ -19,8 +19,18 @@ This is an attempt to make a minimal set of changes to deploy a NextJS applicati
 
 Install the AWS EB CLI.
 
+Initialize and deploy the code.
+
+```
+eb init
+```
+
+If you get weird errors about lacking permission, consider whether your AWS account requires two-factor authentication, in which case you'll have to deal with `aws sts get-session-token` and setting the session information temporarily.
+
 ### Each Deploy
 
 Include the `node_modules` in the deployed package in order to [skip the npm install](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-nodemodules).
 
 1. Run `yarn` prior to uploading source so that dependencies are included.
+2. Commit any changes. Note that even with the `.ebignore` file, you need to commit your changes to git before they'll be accepted for the source bundle.
+3. `eb deploy`
