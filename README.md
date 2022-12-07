@@ -6,6 +6,8 @@ in the year 2022
 
 This is an attempt to make a minimal set of changes to deploy a NextJS application using yarn on AWS's Elastic Beanstalk.
 
+See the [associated blog post](https://daneweber.wordpress.com/2022/10/15/yarn-app-on-elastic-beanstalk-in-2022/) for further details.
+
 ## Changes
 
 1. Create an file in `.ebextensions` that runs `corepack enable` so that `yarn` is available.
