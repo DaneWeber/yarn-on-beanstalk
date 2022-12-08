@@ -12,6 +12,8 @@ Note that `node_modules/.gitignore` is a cleaner way to accomplish what `.ebigno
 
 ## Key Insights
 
+See commit [e097615](https://github.com/DaneWeber/yarn-on-beanstalk/commit/e097615f6e01919f779e034f2b4e6ed1246a1123) for the following set of changes.
+
 ### Prevent `npm install` from running
 
 Do this by deploying _a_ `node_modules` directory. Empty is great. The provided `node_modules/.gitignore` will do the trick. [AWS docs ref](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-nodemodules)
