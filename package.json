@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "zip": "zip source-bundles/yob.zip -r * .[^.]* -x source-bundles/*",
     "start": "next start -p 8080",
     "lint": "next lint"
   },
