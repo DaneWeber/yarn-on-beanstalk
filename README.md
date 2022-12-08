@@ -1,34 +1,52 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Yarn on Beanstalk
 
-## Getting Started
+in the year 2022
 
-First, run the development server:
+## Purpose
 
-```bash
-npm run dev
-# or
-yarn dev
+This is an attempt to make a minimal set of changes to deploy a NextJS application using yarn on AWS's Elastic Beanstalk.
+
+See the [associated blog post](https://daneweber.wordpress.com/2022/10/15/yarn-app-on-elastic-beanstalk-in-2022/) for further details.
+
+Note that `node_modules/.gitignore` is a cleaner way to accomplish what `.ebignore` was doing in the blog post.
+
+## Key Insights
+
+See commit [e097615](https://github.com/DaneWeber/yarn-on-beanstalk/commit/e097615f6e01919f779e034f2b4e6ed1246a1123) for the following set of changes.
+
+### Prevent `npm install` from running
+
+Do this by deploying _a_ `node_modules` directory. Empty is great. The provided `node_modules/.gitignore` will do the trick. [AWS docs ref](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-nodemodules)
+
+### Prevent `npm start` from running
+
+Do this with a `Procfile` that defines how the server starts. [AWS docs ref](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-configuration-procfile.html)
+
+### Enable `yarn` and use it
+
+A `.platform/hooks/predeploy/` script that runs `corepack enable` will ensure that `yarn` is available. This is also a great place to run `yarn install` and `yarn build`.
+
+### Serve on port `8080`
+
+Make sure the way your `Procfile` starts your server specifies port `8080`, usually in the `package.json`.
+
+## Deploy Steps
+
+### One-Time Setup
+
+[Install the AWS EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
+
+Initialize and deploy the code.
+
+```
+eb init
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If you get weird errors about lacking permission, consider whether your AWS account requires two-factor authentication, in which case you'll have to deal with `aws sts get-session-token` and setting the session information temporarily.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Each Deploy
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Include the `node_modules` folder in the deployed package in order to [skip the npm install](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-nodemodules).
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Commit any changes. Note that you need to commit your changes to git before they'll be accepted for the source bundle.
+2. `eb deploy`
