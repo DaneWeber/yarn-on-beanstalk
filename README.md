@@ -10,18 +10,29 @@ See the [associated blog post](https://daneweber.wordpress.com/2022/10/15/yarn-a
 
 Note that `node_modules/.gitignore` is a cleaner way to accomplish what `.ebignore` was doing in the blog post.
 
-## Changes
+## Key Insights
 
-1. Create a `.platform/hooks/predeploy/` script that runs `corepack enable` so that `yarn` is available. This is also a great place to run `yarn install`.
-2. Use a `Procfile` to define [how the server starts](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-configuration-procfile.html).
-3. Set the port to 8080 in the `start` script in the `package.json` and run `yarn build` beforehand.
-4. Add a `node_modules/.gitignore` file so that `node_modules` is uploaded and `npm install` is skipped.
+### Prevent `npm install` from running
+
+Do this by deploying _a_ `node_modules` directory. Empty is great. The provided `node_modules/.gitignore` will do the trick. [AWS docs ref](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-platform-dependencies.html#nodejs-platform-nodemodules)
+
+### Prevent `npm start` from running
+
+Do this with a `Procfile` that defines how the server starts. [AWS docs ref](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/nodejs-configuration-procfile.html)
+
+### Enable `yarn` and use it
+
+A `.platform/hooks/predeploy/` script that runs `corepack enable` will ensure that `yarn` is available. This is also a great place to run `yarn install` and `yarn build`.
+
+### Serve on port `8080`
+
+Make sure the way your `Procfile` starts your server specifies port `8080`, usually in the `package.json`.
 
 ## Deploy Steps
 
 ### One-Time Setup
 
-Install the AWS EB CLI.
+[Install the AWS EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
 
 Initialize and deploy the code.
 
